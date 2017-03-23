@@ -464,5 +464,14 @@ namespace MacroUO.Properties {
                 return ResourceManager.GetString("TextUnhandledException", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An unknown exception has occurred and the application must be terminated..
+        /// </summary>
+        internal static string TextUnknownException {
+            get {
+                return ResourceManager.GetString("TextUnknownException", resourceCulture);
+            }
+        }
     }
 }

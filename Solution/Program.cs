@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using MacroUO.Properties;
 #endregion
 
 namespace MacroUO
@@ -101,10 +102,11 @@ namespace MacroUO
         #endregion
 
         #region Methods: Static
+        [SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
         private static void HandleException(Exception e)
         {
             if (e == null)
-                e = new Exception("An unknown exception has occurred and the application must be terminated.");
+                e = new ApplicationException(Resources.TextUnknownException);
 
             using (ExceptionDialog dialog = new ExceptionDialog(e))
                 dialog.Prompt();

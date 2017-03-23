@@ -114,7 +114,16 @@ namespace MacroUO
             Boolean aeroEnabled;
             RECT nativeRectangle;
 
-            DwmIsCompositionEnabled(out aeroEnabled);
+            if (DwmIsCompositionEnabled(out aeroEnabled) != 0)
+            {
+                OperatingSystem os = Environment.OSVersion;
+                Version osVersion = os.Version;
+
+                if ((os.Platform == PlatformID.Win32NT) && ((osVersion.Major > 6) || ((osVersion.Major) == 6 && (osVersion.Minor >= 2))))
+                    aeroEnabled = true;
+                else
+                    aeroEnabled = false;
+            }
 
             if (aeroEnabled)
             {
@@ -222,7 +231,9 @@ namespace MacroUO
         internal static String GetWindowClass(IntPtr windowHandle)
         {
             StringBuilder buffer = new StringBuilder(256);
-            GetClassName(windowHandle, buffer, buffer.Capacity);
+
+            if (GetClassName(windowHandle, buffer, buffer.Capacity) == 0)
+                return String.Empty;
 
             return buffer.ToString().Trim();
         }
@@ -230,7 +241,9 @@ namespace MacroUO
         internal static String GetWindowText(IntPtr windowHandle)
         {
             StringBuilder buffer = new StringBuilder(1024);
-            GetWindowText(windowHandle, buffer, buffer.Capacity);
+
+            if (GetWindowText(windowHandle, buffer, buffer.Capacity) == 0)
+                return String.Empty;
 
             return buffer.ToString().Trim();
         }

@@ -252,4 +252,7 @@
   <data name="TextUnhandledException" xml:space="preserve">
     <value>Unhandled Exception</value>
   </data>
+  <data name="TextUnknownException" xml:space="preserve">
+    <value>An unknown exception has occurred and the application must be terminated.</value>
+  </data>
 </root>
