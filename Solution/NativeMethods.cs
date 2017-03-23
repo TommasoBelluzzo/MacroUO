@@ -17,7 +17,7 @@ namespace MacroUO
         #region Methods: Imports
         [DllImport("User32.dll", CallingConvention=CallingConvention.StdCall, CharSet=CharSet.Unicode, ExactSpelling=true, SetLastError=true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern Boolean AttachThreadInput([In] UInt32 threadIdFrom, [In] UInt32 threadIdTo, [In] Boolean attach);
+        private static extern Boolean AttachThreadInput([In] UInt32 threadIdFrom, [In] UInt32 threadIdTo, [In, MarshalAs(UnmanagedType.U1)] Boolean attach);
 
         [DllImport("User32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]

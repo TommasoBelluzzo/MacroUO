@@ -6,7 +6,7 @@
 		<ModifierALT>false</ModifierALT>
 		<ModifierCTRL>true</ModifierCTRL>
 		<ModifierSHIFT>false</ModifierSHIFT>
-		<Delay>100</Delay>
+		<Delay>250</Delay>
 	</Macro>
 	<Macro>
 		<Name>Example 2</Name>

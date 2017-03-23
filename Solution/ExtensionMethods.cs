@@ -1,6 +1,7 @@
 ﻿#region Using Directives
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using MacroUO.Properties;
@@ -21,21 +22,22 @@ namespace MacroUO
             StringBuilder builder = new StringBuilder();
 
             if (days > 0)
-                builder.Append(String.Format("{0:0}d ", days));
+                builder.Append(String.Format(CultureInfo.CurrentCulture, "{0:0}d ", days));
 
             if (hours > 0)
-                builder.Append(String.Format("{0:0}h ", hours));
+                builder.Append(String.Format(CultureInfo.CurrentCulture, "{0:0}h ", hours));
 
             if (minutes > 0)
-                builder.Append(String.Format("{0:0}m ", minutes));
+                builder.Append(String.Format(CultureInfo.CurrentCulture, "{0:0}m ", minutes));
 
-            builder.Append(String.Format("{0:0}s", span.Seconds));
+            builder.Append(String.Format(CultureInfo.CurrentCulture, "{0:0}s", span.Seconds));
 
             return builder.ToString();
         }
         #endregion
 
         #region String
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [SuppressMessage("ReSharper", "UnusedMember.Global")]
         public static T ToEnum<T>(this String value, Boolean ignoreCase = false) where T : struct, IComparable, IConvertible, IFormattable
         {
@@ -56,6 +58,7 @@ namespace MacroUO
             return result;
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [SuppressMessage("ReSharper", "UnusedMember.Global")]
         public static String[] SplitAndTrim(this String value, params Char[] separators)
         {

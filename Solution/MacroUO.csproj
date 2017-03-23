@@ -75,6 +75,7 @@
     <Compile Include="ApplicationDialog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Macros.cs" />
     <Compile Include="Messenger.cs">
       <SubType>Component</SubType>

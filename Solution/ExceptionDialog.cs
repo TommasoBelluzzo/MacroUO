@@ -174,6 +174,7 @@ namespace MacroUO
         #endregion
 
         #region Methods: Overloads
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         [SuppressMessage("ReSharper", "UnusedMember.Global")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new DialogResult ShowDialog()
@@ -181,6 +182,8 @@ namespace MacroUO
             return DialogResult.None;
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+        [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId="owner")]
         [SuppressMessage("ReSharper", "UnusedMember.Global")]
         [SuppressMessage("ReSharper", "UnusedParameter.Global")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -189,12 +192,14 @@ namespace MacroUO
             return DialogResult.None;
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         [SuppressMessage("ReSharper", "UnusedMember.Global")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new void Show() { }
         #endregion
 
         #region Methods: Overrides
+        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId="0")]
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);

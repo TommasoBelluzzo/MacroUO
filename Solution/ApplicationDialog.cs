@@ -155,10 +155,22 @@ namespace MacroUO
         #endregion
 
         #region Constructors
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId="System.Windows.Forms.Control.set_Text(System.String)")]
+        [SuppressMessage("Microsoft.Maintainability", "CA1505:AvoidUnmaintainableCode")]
+        [SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges")]
+        [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId="MenuStrip")]
         [SuppressMessage("ReSharper", "FunctionComplexityOverflow")]
         [SuppressMessage("ReSharper", "LocalizableElement")]
         public ApplicationDialog()
         {
+            Boolean topMost = Settings.Default.TopMost;
+            Boolean transparency = Settings.Default.Transparent;
+            Int32 keysLength = s_Keys.Length;
+            Object[] items = new Object[keysLength];
+
+            for (Int32 i = 0; i < keysLength; ++i)
+                items[i] = s_Keys[i].Name;
+
             m_PresetsPreviousIndex = -1;
             m_ButtonAdd = new Button();
             m_ButtonReload = new Button();
@@ -344,6 +356,7 @@ namespace MacroUO
             m_ComboBoxKeys.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             m_ComboBoxKeys.DropDownStyle = ComboBoxStyle.DropDownList;
             m_ComboBoxKeys.FormattingEnabled = true;
+            m_ComboBoxKeys.Items.AddRange(items);
             m_ComboBoxKeys.Location = new Point(53, 1);
             m_ComboBoxKeys.Margin = new Padding(0, 1, 0, 3);
             m_ComboBoxKeys.Name = "ComboBoxKeys";
@@ -616,12 +629,14 @@ namespace MacroUO
             m_ToolStripMenuItemOptions.Size = new Size(61, 20);
             m_ToolStripMenuItemOptions.Text = Resources.TextOptions;
 
+            m_ToolStripMenuItemTopMost.Checked = topMost;
             m_ToolStripMenuItemTopMost.CheckOnClick = true;
             m_ToolStripMenuItemTopMost.Name = "ToolStripMenuItemTopMost";
             m_ToolStripMenuItemTopMost.Size = new Size(145, 22);
             m_ToolStripMenuItemTopMost.Text = Resources.TextTopMost;
             m_ToolStripMenuItemTopMost.CheckedChanged += ToolStripMenuItemTopMostCheckedChanged;
 
+            m_ToolStripMenuItemTransparency.Checked = transparency;
             m_ToolStripMenuItemTransparency.CheckOnClick = true;
             m_ToolStripMenuItemTransparency.Name = "ToolStripMenuItemTransparency";
             m_ToolStripMenuItemTransparency.Size = new Size(145, 22);
@@ -643,8 +658,10 @@ namespace MacroUO
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "ApplicationDialog";
+            Opacity = transparency ? 0.6d : 1.0d;
             StartPosition = FormStartPosition.CenterScreen;
             Text = String.Concat(Resources.TextTitle, " ", Program.Version);
+            TopMost = topMost;
 
             m_MenuStrip.ResumeLayout(true);
             m_TableLayoutPanelContainer.ResumeLayout(true);
@@ -914,7 +931,7 @@ namespace MacroUO
 
             if (macroKeyIndex == -1)
             {
-                m_Messenger.DisplayError(String.Format(Resources.ErrorPresetsKey, macro.Name));
+                m_Messenger.DisplayError(String.Format(CultureInfo.CurrentCulture, Resources.ErrorPresetsKey, macro.Name));
                 m_ComboBoxPresets.SelectedIndex = m_PresetsPreviousIndex;
             }
             else
@@ -1154,6 +1171,7 @@ namespace MacroUO
             ClientsEnable();
         }
 
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId="System.Windows.Forms.Control.set_Text(System.String)")]
         [SuppressMessage("ReSharper", "LocalizableElement")]
         private void CountersReset()
         {
@@ -1280,6 +1298,7 @@ namespace MacroUO
             ActiveControl = m_ButtonReload;
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private void PresetsLoad()
         {
             PresetsDisable();
@@ -1374,6 +1393,7 @@ namespace MacroUO
             base.Dispose(disposing);
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             if (m_PresetsChanged)
@@ -1402,28 +1422,10 @@ namespace MacroUO
 
         protected override void OnLoad(EventArgs e)
         {
-            Int32 keysLength = s_Keys.Length;
-            Object[] items = new Object[keysLength];
-
-            for (Int32 i = 0; i < keysLength; ++i)
-                items[i] = s_Keys[i].Name;
-
-            m_ComboBoxKeys.BeginUpdate();
-            m_ComboBoxKeys.Items.AddRange(items);
-            m_ComboBoxKeys.EndUpdate();
-
-            Boolean topMost = Settings.Default.TopMost;
-            Boolean transparency = Settings.Default.Transparent;
-
-            m_ToolStripMenuItemTopMost.Checked = topMost;
-            m_ToolStripMenuItemTransparency.Checked = transparency;
-
             ClientsScan();
             PresetsLoad();
 
             ActiveControl = m_ButtonStart.Enabled ? m_ButtonStart : m_ButtonScan;
-            Opacity = transparency ? 0.6d : 1.0d;
-            TopMost = topMost;
 
             base.OnLoad(e);
         }
@@ -1496,7 +1498,7 @@ namespace MacroUO
             [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
             public Key(Keys key)
             {
-                m_Name = Enum.GetName(typeof(Keys), key).ToUpper();
+                m_Name = Enum.GetName(typeof(Keys), key).ToUpper(CultureInfo.CurrentCulture);
                 m_Code = (UInt32)key;
             }
 
