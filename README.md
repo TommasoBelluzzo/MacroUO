@@ -6,8 +6,29 @@ Inspired by UO Loop, MacroUO is a very simple third party macro utility for Ulti
 
 The source code is completely undocumented and has no descriptive comments; I know it's a bad practice, but I really don't have time to create a proper documentation. Anyway, everything should be pretty straightforward since it's just a simple form with some buttons.
 
+The following method (contained within the `ApplicationDialog` class):
 
+```csharp
+private Boolean EnumerateWindow(IntPtr windowHandle, IntPtr lParameter)
+{
+	String windowClass = NativeMethods.GetWindowClass(windowHandle);
 
+	if (!windowClass.Contains("Ultima Online"))
+		return true;
+
+	String windowText = NativeMethods.GetWindowText(windowHandle);
+
+	if (!windowText.Contains("Ultima Online - "))
+		return true;
+
+	UInt32 windowThreadId = NativeMethods.GetWindowThreadId(windowHandle);
+
+	m_Clients.Add(new Client(windowText, windowHandle, windowThreadId));
+
+	return true;
+}
+```
+helps MacroUO to identify active Ultima Online client instances on which macros can be executed. Making modifications `windowClass` and `windowText` conditions allows MacroUO to work on other games or applications. Removing those conditions would transform it into a universal macro tool.
 
 ## Contributions
 
