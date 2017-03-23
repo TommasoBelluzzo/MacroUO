@@ -1085,7 +1085,7 @@ namespace MacroUO
 
             String windowText = NativeMethods.GetWindowText(windowHandle);
 
-            if (!windowText.Contains("Ultima Online"))
+            if (!windowText.Contains("Ultima Online - "))
                 return true;
 
             UInt32 windowThreadId = NativeMethods.GetWindowThreadId(windowHandle);
