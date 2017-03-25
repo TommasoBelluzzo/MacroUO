@@ -1112,44 +1112,27 @@ namespace MacroUO
             return true;
         }
 
-        private void ClientsDisable()
+        private void ClientsScan()
         {
             ActiveControl = null;
 
             m_ButtonStart.Enabled = false;
             m_TableLayoutPanelClients.Enabled = false;
-
-            m_Clients.Clear();
-
             m_ComboBoxClients.BeginUpdate();
             m_ComboBoxClients.Items.Clear();
             m_ComboBoxClients.Items.Add(Resources.TextClientsEmpty);
             m_ComboBoxClients.SelectedIndex = 0;
             m_ComboBoxClients.EndUpdate();
-
             Refresh();
-        }
 
-        private void ClientsEnable()
-        {
-            Boolean clientsFound = (m_Clients.Count > 0);
-
-            m_ComboBoxClients.Enabled = clientsFound;
-            m_TableLayoutPanelClients.Enabled = true;
-            m_ButtonStart.Enabled = clientsFound;
-
-            ActiveControl = m_ButtonScan;
-        }
-
-        private void ClientsScan()
-        {
-            ClientsDisable();
+            m_Clients.Clear();
 
             NativeMethods.EnumerateWindows(EnumerateWindow);
 
             Int32 clientsCount = m_Clients.Count;
+            Boolean clientsFound = (clientsCount > 0);
 
-            if (clientsCount > 0)
+            if (clientsFound)
             {
                 Object[] names = new Object[clientsCount];
 
@@ -1168,7 +1151,11 @@ namespace MacroUO
 
             Thread.Sleep(250);
 
-            ClientsEnable();
+            m_ComboBoxClients.Enabled = clientsFound;
+            m_TableLayoutPanelClients.Enabled = true;
+            m_ButtonStart.Enabled = clientsFound;
+
+            ActiveControl = m_ButtonScan;
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId="System.Windows.Forms.Control.set_Text(System.String)")]
@@ -1182,19 +1169,15 @@ namespace MacroUO
             m_TextBoxCounterTime.Text = "0s";
         }
 
-        private void MacroDisable()
+        private void MacroStart()
         {
             m_ButtonStart.Enabled = false;
-
             m_TableLayoutPanelClients.Enabled = false;
             m_TableLayoutPanelPresets.Enabled = false;
-
             m_LabelKey.Enabled = false;
             m_ComboBoxKeys.Enabled = false;
-
             m_LabelDelay.Enabled = false;
             m_NumericUpDownDelay.Enabled = false;
-
             m_LabelModifiers.Enabled = false;
             m_CheckBoxAlt.Enabled = false;
             m_CheckBoxCtrl.Enabled = false;
@@ -1209,38 +1192,8 @@ namespace MacroUO
                 m_NumericUpDownRuns.ReadOnly = true;
 
             m_ButtonStop.Enabled = true;
+
             ActiveControl = m_ButtonStop;
-        }
-
-        private void MacroEnable()
-        {
-            m_ButtonStop.Enabled = false;
-
-            m_TableLayoutPanelClients.Enabled = true;
-            m_TableLayoutPanelPresets.Enabled = true;
-
-            m_LabelKey.Enabled = true;
-            m_ComboBoxKeys.Enabled = true;
-
-            m_LabelDelay.Enabled = true;
-            m_NumericUpDownDelay.Enabled = true;
-
-            m_LabelModifiers.Enabled = true;
-            m_CheckBoxAlt.Enabled = true;
-            m_CheckBoxCtrl.Enabled = true;
-            m_CheckBoxShift.Enabled = true;
-
-            m_LabelRuns.Enabled = true;
-            m_NumericUpDownRuns.ReadOnly = false;
-            m_NumericUpDownRuns.Enabled = true;
-
-            m_ButtonStart.Enabled = true;
-            ActiveControl = m_ButtonStart;
-        }
-
-        private void MacroStart()
-        {
-            MacroDisable();
 
             Client client = m_Clients[m_ComboBoxClients.SelectedIndex];
             UInt32 keyCode = s_Keys[m_ComboBoxKeys.SelectedIndex].Code;
@@ -1265,43 +1218,41 @@ namespace MacroUO
             m_TimerClient.Stop();
             m_TimerMacro.Stop();
 
-            MacroEnable();
+            m_ButtonStop.Enabled = false;
+            m_TableLayoutPanelClients.Enabled = true;
+            m_TableLayoutPanelPresets.Enabled = true;
+            m_LabelKey.Enabled = true;
+            m_ComboBoxKeys.Enabled = true;
+            m_LabelDelay.Enabled = true;
+            m_NumericUpDownDelay.Enabled = true;
+            m_LabelModifiers.Enabled = true;
+            m_CheckBoxAlt.Enabled = true;
+            m_CheckBoxCtrl.Enabled = true;
+            m_CheckBoxShift.Enabled = true;
+            m_LabelRuns.Enabled = true;
+            m_NumericUpDownRuns.ReadOnly = false;
+            m_NumericUpDownRuns.Enabled = true;
+            m_ButtonStart.Enabled = true;
+
+            ActiveControl = m_ButtonStart;
         }
 
-        private void PresetsDisable()
+        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+        private void PresetsLoad()
         {
             ActiveControl = null;
 
             m_ButtonStart.Enabled = false;
             m_TableLayoutPanelMacro.Enabled = false;
             m_TableLayoutPanelPresets.Enabled = false;
-
             m_ComboBoxKeys.SelectedIndex = 0;
             m_NumericUpDownDelay.Value = 100m;
             m_CheckBoxAlt.Checked = false;
             m_CheckBoxCtrl.Checked = false;
             m_CheckBoxShift.Checked = false;
-
             Refresh();
-        }
 
-        private void PresetsEnable()
-        {
-            Boolean presetsExist = (m_Presets.Count > 0);
-
-            m_ComboBoxPresets.Enabled = presetsExist;
-
-            m_TableLayoutPanelMacro.Enabled = true;
-            m_TableLayoutPanelPresets.Enabled = true;
-            m_ButtonStart.Enabled = (m_Clients.Count > 0);
-
-            ActiveControl = m_ButtonReload;
-        }
-
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        private void PresetsLoad()
-        {
-            PresetsDisable();
+            m_PresetsChanged = false;
 
             Boolean caughtError = false;
             Boolean firstLoad = (m_Presets == null);
@@ -1329,11 +1280,11 @@ namespace MacroUO
             }
 
             Int32 presetsCount = m_Presets.Count;
+            Boolean presetsFound = (presetsCount > 0);
+
             Object[] names;
 
-            if (presetsCount == 0)
-                names = new Object[] { Resources.TextPresetsEmpty };
-            else
+            if (presetsFound)
             {
                 Int32 namesLength = presetsCount + 1;
 
@@ -1343,6 +1294,8 @@ namespace MacroUO
                 for (Int32 i = 1; i < namesLength; ++i)
                     names[i] = m_Presets[(i - 1)].Name;
             }
+            else
+                names = new Object[] { Resources.TextPresetsEmpty };
 
             m_ComboBoxPresets.BeginUpdate();
             m_ComboBoxPresets.Items.Clear();
@@ -1355,7 +1308,12 @@ namespace MacroUO
             else if (!firstLoad)
                 m_Messenger.DisplayInformation(Resources.SuccessPresetsReload);
 
-            PresetsEnable();
+            m_ComboBoxPresets.Enabled = presetsFound;
+            m_TableLayoutPanelMacro.Enabled = true;
+            m_TableLayoutPanelPresets.Enabled = true;
+            m_ButtonStart.Enabled = (m_Clients.Count > 0);
+
+            ActiveControl = m_ButtonReload;
         }
 
         private void SetLocation(Int32 x, Int32 y)
