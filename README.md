@@ -4,6 +4,8 @@ Inspired by UO Loop, MacroUO is a very simple third party macro utility for Ulti
 
 ## Documentation
 
+### Code
+
 The source code is completely undocumented and has no descriptive comments; I know it's a bad practice, but I really don't have time to create a proper documentation. Anyway, everything should be pretty straightforward since it's just a simple form with some buttons.
 
 The following method (contained within the `ApplicationDialog` class):
