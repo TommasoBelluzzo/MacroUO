@@ -8,9 +8,13 @@ Inspired by UO Loop, MacroUO is a very simple third party macro utility for Ulti
 
 #### Clients Panel
 
-The `Scan` button analyses running processes in order to identify Ultima Online clients on which macros can be executed. MacroUO will consider only the client instances on which the account login process has been successfully performed.
+The `Scan` button analyses running processes in order to identify active Ultima Online clients. MacroUO will consider only the client instances on which an account login process has been successfully performed.
 
-The purpose of the dropdown menu is to select the active Ultima Online client on which macros are executed once the `Start` button is pressed.
+The purpose of the dropdown menu is to select the target client on which macros will be executed once the `Start` button is pressed.
+
+#### Macro Panel
+
+This panel 
 
 ### Code
 
