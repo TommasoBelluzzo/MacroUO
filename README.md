@@ -4,11 +4,19 @@ Inspired by UO Loop, MacroUO is a very simple third party macro utility for Ulti
 
 ## Documentation
 
+### Usage
+
+#### Clients Panel
+
+The `Scan` button analyses running processes in order to identify Ultima Online clients on which macros can be executed. MacroUO will consider only the client instances on which the account login process has been successfully performed.
+
+The purpose of the dropdown menu is to select the active Ultima Online client on which macros are executed once the `Start` button is pressed.
+
 ### Code
 
 The source code is completely undocumented and has no descriptive comments; I know it's a bad practice, but I really don't have time to create a proper documentation. Anyway, everything should be pretty straightforward since it's just a simple form with some buttons.
 
-The following method (contained within the `ApplicationDialog` class):
+The following method (which can be found within the `ApplicationDialog` class):
 
 ```csharp
 private Boolean EnumerateWindow(IntPtr windowHandle, IntPtr lParameter)
@@ -30,7 +38,7 @@ private Boolean EnumerateWindow(IntPtr windowHandle, IntPtr lParameter)
 	return true;
 }
 ```
-helps MacroUO to identify active Ultima Online clients on which macros can be executed. Making modifications to `windowClass` and `windowText` conditions woul allow MacroUO to work on other games or applications. Removing these conditions would transform it into a universal macro tool.
+helps MacroUO to identify active Ultima Online clients on which macros can be executed. Making modifications to `windowClass` and `windowText` conditions would allow MacroUO to work on other games or applications. Removing these conditions would transform it into a universal macro tool.
 
 ## Contributions
 
