@@ -24,7 +24,7 @@ The purpose of this panel is to manage the preset macros stored in the `Presets.
 
 While a preset is selected in the dropdown menu:
 * changing the `Macro` panel settings  modifies the active preset;
-* pushing `F2` opens up a dialog that allows to rename the active preset (the name must be unique and composed of alphanumeric characters separated by single white-space character).
+* pushing `F2` opens up a dialog that allows to rename the active preset (the name must be unique and composed of alphanumeric characters separated by single white-space characters).
 
 All the changes to the preset macros are automatically saved when MacroUO is closed.
 
