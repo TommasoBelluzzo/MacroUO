@@ -30,7 +30,7 @@ All the changes to the preset macros are automatically saved when MacroUO is clo
 
 #### Buttons
 
-On the bottom of the window there are three buttons. The `Start` button tells MacroUO to activate the process that executes the specified macro on the target client, while the `Stop` button interrupts it. The `Collapse` button reduces the MacroUO window size, while the `Expand` button restores it.
+On the bottom of the window there are three buttons. The `Start` button activates the process that executes the specified macro on the target client, while the `Stop` button interrupts it. The `Collapse` button reduces the MacroUO window size, while the `Expand` button restores it.
 
 #### Options
 
