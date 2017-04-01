@@ -26,6 +26,8 @@ While a preset is selected in the dropdown menu:
 * changing the `Macro` panel settings  modifies the active preset;
 * pushing `F2` opens up a dialog that allows to rename the active preset (the name must be unique and composed of alphanumeric characters separated by single white-space character).
 
+All the changes to the preset macros are automatically saved when MacroUO is closed.
+
 #### Buttons
 
 On the bottom of the window there are three buttons. The `Start` button tells MacroUO to activate the process that executes the specified macro on the target client, while the `Stop` button interrupts it. The `Collapse` button reduces the MacroUO window size, while the `Expand` button restores it.
