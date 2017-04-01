@@ -6,6 +6,10 @@ Inspired by UO Loop, MacroUO is a very simple third party macro utility for Ulti
 
 ### Usage
 
+#### Options
+
+Two different interface options can be toggled on and off through the menu bar. The `TopMost` option forces the MacroUO window to overlap all the other windows, even when it's not active. The `Transparency` option makes the MacroUO window slightly transparent.
+
 #### Clients Panel
 
 The `Scan` button analyses running processes in order to identify active Ultima Online clients. Only the clients on which an account has been successfully authenticated will show up.
@@ -31,10 +35,6 @@ All the changes to the preset macros are automatically saved when MacroUO is clo
 #### Buttons
 
 On the bottom of the window there are three buttons. The `Start` button activates the process that executes the specified macro on the target client, while the `Stop` button interrupts it. The `Collapse` button reduces the MacroUO window size, while the `Expand` button restores it.
-
-#### Options
-
-Two different interface options can be toggled on and off through the menu bar. The `TopMost` option forces the MacroUO window to overlap all the other windows, even when it's not active. The `Transparency` option makes the MacroUO window slightly transparent.
 
 ### Code
 
