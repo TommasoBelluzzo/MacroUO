@@ -10,17 +10,21 @@ Inspired by UO Loop, MacroUO is a very simple third party macro utility for Ulti
 
 The `Scan` button analyses running processes in order to identify active Ultima Online clients. Only the clients on which an account has been successfully authenticated will show up.
 
-The purpose of the dropdown menu is to select the target client on which macros will be executed.
+The purpose of the dropdown menu is to select the target client on which the selected macro will be executed.
 
 #### Macro Panel
 
-This panel holds the macro settings. The `Key` dropdown sets the keyboard key to send to the target client. The `Delay` control sets the delay (in milliseconds) between each macro execution. The key modifiers can be turned on and off using their respective checkboxes. A limit to the number of executions can be set using the `Runs` control: MacroUO will automatically stop once the specified limit has been reached.
+This panel holds the macro settings. The `Key` dropdown sets the keyboard key to send to the target client. The `Delay` control sets the delay (in milliseconds) between each macro execution. The key modifiers can be turned on and off using their respective checkboxes. A limit to the number of executions can be set through the `Runs` control: MacroUO will automatically stop once the specified limit has been reached.
 
 On the bottom right of the panel there are two counters: the first one records how many times the current macro has been executed, the second one keeps track of the elapsed time since the start of the process. Pushing the `Reset` button will immediately reset both counters.
 
 #### Presets Panel
 
-A
+The purpose of this panel is to manage the preset macros stored in the `Presets.xml` file. The dropdown menu loads the selected preset into the `Macro` panel. The `Add` button, enabled only if no preset is selected, creates a new preset (with a default name) from the current macro settings. The `Remove` button deletes the currently selected preset. The `Reload` button forces MacroUO to reload the preset macros from the `Presets.xml` file.
+
+While a preset is selected in the dropdown menu:
+* changing the `Macro` panel settings  modifies the active preset;
+* pushing `F2` opens up a dialog that allows to rename the active preset (the name must be unique and only alphanumeric characters separated by a single white-space character are accepted).
 
 ### Code
 
