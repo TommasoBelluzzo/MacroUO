@@ -8,13 +8,19 @@ Inspired by UO Loop, MacroUO is a very simple third party macro utility for Ulti
 
 #### Clients Panel
 
-The `Scan` button analyses running processes in order to identify active Ultima Online clients. MacroUO will consider only the client instances on which an account login process has been successfully performed.
+The `Scan` button analyses running processes in order to identify active Ultima Online clients. Only the clients on which an account has been successfully authenticated will show up.
 
-The purpose of the dropdown menu is to select the target client on which macros will be executed once the `Start` button is pressed.
+The purpose of the dropdown menu is to select the target client on which macros will be executed.
 
 #### Macro Panel
 
-This panel 
+This panel holds the macro settings. The `Key` dropdown sets the keyboard key to send to the target client. The `Delay` control sets the delay (in milliseconds) between each macro execution. The key modifiers can be turned on and off using their respective checkboxes. A limit to the number of executions can be set using the `Runs` control: MacroUO will automatically stop once the desired number of executions has been reached.
+
+On the bottom right of the panel there are two counters that can be reset. The first one records how many times the current macro has been executed. The second one keeps track of the elapsed time since the macro has been launched. Pushing the `Reset` button will immediately reset both counters.
+
+#### Presets Panel
+
+A
 
 ### Code
 
