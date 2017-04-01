@@ -14,9 +14,9 @@ The purpose of the dropdown menu is to select the target client on which macros 
 
 #### Macro Panel
 
-This panel holds the macro settings. The `Key` dropdown sets the keyboard key to send to the target client. The `Delay` control sets the delay (in milliseconds) between each macro execution. The key modifiers can be turned on and off using their respective checkboxes. A limit to the number of executions can be set using the `Runs` control: MacroUO will automatically stop once the desired number of executions has been reached.
+This panel holds the macro settings. The `Key` dropdown sets the keyboard key to send to the target client. The `Delay` control sets the delay (in milliseconds) between each macro execution. The key modifiers can be turned on and off using their respective checkboxes. A limit to the number of executions can be set using the `Runs` control: MacroUO will automatically stop once the specified limit has been reached.
 
-On the bottom right of the panel there are two counters that can be reset. The first one records how many times the current macro has been executed. The second one keeps track of the elapsed time since the macro has been launched. Pushing the `Reset` button will immediately reset both counters.
+On the bottom right of the panel there are two counters: the first one records how many times the current macro has been executed, the second one keeps track of the elapsed time since the start of the process. Pushing the `Reset` button will immediately reset both counters.
 
 #### Presets Panel
 
