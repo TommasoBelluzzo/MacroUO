@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 #endregion
 
 #region Information
-[assembly: AssemblyDescription("A simple macroing tool for Ultima Online.")]
+[assembly: AssemblyDescription("A simple macro utility for Ultima Online.")]
 [assembly: AssemblyCompany("Tommaso Belluzzo")]
 
 #if (DEBUG)
