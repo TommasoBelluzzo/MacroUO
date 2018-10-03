@@ -38,7 +38,7 @@ On the bottom of the window there are three buttons. The `Start` button activate
 
 ### Code
 
-The source code is completely undocumented and has no descriptive comments; I know it's a bad practice, but I really don't have time to create a proper documentation. Anyway, everything should be pretty straightforward since it's just a simple form with some buttons.
+The source code is completely undocumented and has no descriptive comments; I know it's a bad practice, but I really don't have time to create a proper documentation. Nevertheless, everything should be pretty straightforward since it's just a simple form with a few buttons.
 
 The following method (which can be found within the `ApplicationDialog` class):
 
@@ -62,4 +62,4 @@ private Boolean EnumerateWindow(IntPtr windowHandle, IntPtr lParameter)
 	return true;
 }
 ```
-helps MacroUO to identify active Ultima Online clients on which macros can be executed. Making modifications to `windowClass` and `windowText` conditions would allow MacroUO to work on other games or applications. Removing these conditions would transform it into a universal macro tool.
+helps MacroUO to identify active Ultima Online clients on which macros can be executed. Making modifications to `windowClass` and `windowText` conditions would allow MacroUO to work on other games or applications. Removing the aforementioned conditions would transform it into a universal macro tool.
