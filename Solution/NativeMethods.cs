@@ -13,7 +13,7 @@ namespace MacroUO
     [SuppressUnmanagedCodeSecurity]
     internal static class NativeMethods
     {
-        #region Methods: Imports
+        #region Imports
         [DllImport("User32.dll", CallingConvention=CallingConvention.StdCall, CharSet=CharSet.Unicode, ExactSpelling=true, SetLastError=true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern Boolean AttachThreadInput([In] UInt32 threadIdFrom, [In] UInt32 threadIdTo, [In, MarshalAs(UnmanagedType.U1)] Boolean attach);
@@ -99,7 +99,7 @@ namespace MacroUO
         private static extern UInt32 RegisterWindowMessage([In] String message);
         #endregion
 
-        #region Methods: Static
+        #region Methods
         private static UInt32 GetSize(Type type)
         {
             if (type.IsEnum)
