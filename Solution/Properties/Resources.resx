@@ -213,6 +213,9 @@
   <data name="TextMacro" xml:space="preserve">
     <value>Macro</value>
   </data>
+  <data name="TextMenuStrip" xml:space="preserve">
+    <value>MenuStrip</value>
+  </data>
   <data name="TextModifiers" xml:space="preserve">
     <value>Modifiers:</value>
   </data>
@@ -281,6 +284,12 @@
   </data>
   <data name="TextUnknownException" xml:space="preserve">
     <value>An unknown exception has occurred and the application must be terminated.</value>
+  </data>
+  <data name="TextZero" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="TextZeroSeconds" xml:space="preserve">
+    <value>0s</value>
   </data>
   <data name="ValidationNameErrorDuplicate" xml:space="preserve">
     <value>The name must be unique.</value>

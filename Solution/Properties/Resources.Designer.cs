@@ -19,7 +19,7 @@ namespace MacroUO.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -349,6 +349,15 @@ namespace MacroUO.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MenuStrip.
+        /// </summary>
+        internal static string TextMenuStrip {
+            get {
+                return ResourceManager.GetString("TextMenuStrip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modifiers:.
         /// </summary>
         internal static string TextModifiers {
@@ -552,6 +561,24 @@ namespace MacroUO.Properties {
         internal static string TextUnknownException {
             get {
                 return ResourceManager.GetString("TextUnknownException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 0.
+        /// </summary>
+        internal static string TextZero {
+            get {
+                return ResourceManager.GetString("TextZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 0s.
+        /// </summary>
+        internal static string TextZeroSeconds {
+            get {
+                return ResourceManager.GetString("TextZeroSeconds", resourceCulture);
             }
         }
         
