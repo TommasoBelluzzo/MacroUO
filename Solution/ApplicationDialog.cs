@@ -20,7 +20,7 @@ namespace MacroUO
     [SuppressMessage("ReSharper", "PrivateFieldCanBeConvertedToLocalVariable")]
     public sealed class ApplicationDialog : Form
     {
-        #region Members: Instance
+        #region Members
         private Boolean m_Collapsed;
         private Boolean m_PresetsChanged;
         private Decimal m_CounterRuns;
@@ -75,13 +75,6 @@ namespace MacroUO
         #endregion
 
         #region Constructors
-        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId="System.Windows.Forms.Control.set_Text(System.String)")]
-        [SuppressMessage("Microsoft.Maintainability", "CA1505:AvoidUnmaintainableCode")]
-        [SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges")]
-        [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId="MenuStrip")]
-        [SuppressMessage("ReSharper", "CoVariantArrayConversion")]
-        [SuppressMessage("ReSharper", "FunctionComplexityOverflow")]
-        [SuppressMessage("ReSharper", "LocalizableElement")]
         public ApplicationDialog()
         {
             Boolean topMost = Settings.Default.TopMost;
@@ -141,8 +134,8 @@ namespace MacroUO
             m_GroupBoxMacro.SuspendLayout();
             m_TableLayoutPanelMacro.SuspendLayout();
             m_TableLayoutPanelModifiers.SuspendLayout();
-            ((ISupportInitialize)m_NumericUpDownDelay).BeginInit();
-            ((ISupportInitialize)m_NumericUpDownRuns).BeginInit();
+            m_NumericUpDownDelay.BeginInit();
+            m_NumericUpDownRuns.BeginInit();
 
             m_GroupBoxPresets.SuspendLayout();
             m_TableLayoutPanelPresets.SuspendLayout();
@@ -387,7 +380,7 @@ namespace MacroUO
             m_MenuStrip.RightToLeft = RightToLeft.Yes;
             m_MenuStrip.Size = new Size(484, 24);
             m_MenuStrip.TabIndex = 0;
-            m_MenuStrip.Text = "MenuStrip";
+            m_MenuStrip.Text = Resources.TextMenuStrip;
 
             m_Messenger.ContainerControl = this;
 
@@ -399,8 +392,8 @@ namespace MacroUO
             m_NumericUpDownDelay.Increment = 50m;
             m_NumericUpDownDelay.Location = new Point(53, 27);
             m_NumericUpDownDelay.Margin = new Padding(0, 2, 0, 3);
-            m_NumericUpDownDelay.Maximum = Macro.DelayMaximum;
-            m_NumericUpDownDelay.Minimum = Macro.DelayMinimum;
+            m_NumericUpDownDelay.Maximum = Macro.MAXIMUM_DELAY;
+            m_NumericUpDownDelay.Minimum = Macro.MINIMUM_DELAY;
             m_NumericUpDownDelay.Name = "NumericUpDownDelay";
             m_NumericUpDownDelay.Size = new Size(169, 21);
             m_NumericUpDownDelay.TabIndex = 3;
@@ -523,7 +516,7 @@ namespace MacroUO
             m_TextBoxRuns.ReadOnly = true;
             m_TextBoxRuns.Size = new Size(88, 21);
             m_TextBoxRuns.TabIndex = 9;
-            m_TextBoxRuns.Text = "0";
+            m_TextBoxRuns.Text = Resources.TextZero;
 
             m_TextBoxTime.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             m_TextBoxTime.Font = new Font("Microsoft Sans Serif", 8.75f, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -533,7 +526,7 @@ namespace MacroUO
             m_TextBoxTime.ReadOnly = true;
             m_TextBoxTime.Size = new Size(88, 20);
             m_TextBoxTime.TabIndex = 11;
-            m_TextBoxTime.Text = "0s";
+            m_TextBoxTime.Text = Resources.TextZeroSeconds;
 
             m_TimerClient.Interval = 10;
             m_TimerClient.Tick += TimerClientTick;
@@ -589,8 +582,8 @@ namespace MacroUO
             m_GroupBoxMacro.ResumeLayout(true);
             m_TableLayoutPanelMacro.ResumeLayout(true);
             m_TableLayoutPanelModifiers.ResumeLayout(true);
-            ((ISupportInitialize)m_NumericUpDownDelay).EndInit();
-            ((ISupportInitialize)m_NumericUpDownRuns).EndInit();
+            m_NumericUpDownDelay.EndInit();
+            m_NumericUpDownRuns.EndInit();
 
             m_GroupBoxPresets.ResumeLayout(true);
             m_TableLayoutPanelPresets.ResumeLayout(true);
@@ -599,16 +592,15 @@ namespace MacroUO
         }
         #endregion
 
-        #region Methods: Events
-        [SuppressMessage("ReSharper", "AccessToModifiedClosure")]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        #region Events
         private void ButtonAddClick(Object sender, EventArgs e)
         {
             ActiveControl = null;
             m_ButtonAdd.Enabled = false;
 
+            Boolean presetAssigned = false;
             String presetName = null;
-            UInt32 presetNumber = 1;
+            UInt32 presetNumber = 1u;
 
             while (presetNumber < UInt32.MaxValue)
             {
@@ -617,8 +609,14 @@ namespace MacroUO
                 if (m_Presets.Any(x => x.Name == presetName))
                     ++presetNumber;
                 else
+                {
+                    presetAssigned = true;
                     break;
+                }  
             }
+
+            if (!presetAssigned)
+                throw new InvalidOperationException("The maximum number of presets has been reached.");
 
             m_Presets.Add(new Macro
             {
@@ -976,7 +974,7 @@ namespace MacroUO
         }
         #endregion
 
-        #region Methods: Instance
+        #region Methods
         private Boolean CountersIncrease()
         {
             ++m_CounterRuns;
@@ -1008,6 +1006,45 @@ namespace MacroUO
             m_Clients.Add(new Client(windowText, windowHandle, windowThreadId));
 
             return true;
+        }
+
+        protected override Boolean ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData != Keys.F2)
+                return base.ProcessCmdKey(ref msg, keyData);
+
+            if (!m_ComboBoxPresets.Enabled || !m_ComboBoxPresets.Visible || m_ComboBoxPresets.DroppedDown)
+                return true;
+
+            Int32 selectedIndex = m_ComboBoxPresets.SelectedIndex;
+
+            if (selectedIndex < 1)
+                return true;
+
+            Int32 presetIndex = selectedIndex - 1;
+            Macro preset = m_Presets[presetIndex];
+            String presetName = preset.Name;
+            String[] existingNames = m_Presets.GetNames(presetIndex);
+
+            using (RenameDialog dialog = new RenameDialog(presetName, existingNames))
+            {
+                if (dialog.ShowDialog(this) != DialogResult.OK)
+                    return true;
+
+                String newName = dialog.NewName;
+
+                if (newName == presetName)
+                    return true;
+
+                preset.Name = newName;
+                m_PresetsChanged = true;
+
+                m_ComboBoxPresets.BeginUpdate();
+                m_ComboBoxPresets.Items[selectedIndex] = newName;
+                m_ComboBoxPresets.EndUpdate();
+
+                return true;
+            }
         }
 
         private void ClientsScan()
@@ -1056,15 +1093,21 @@ namespace MacroUO
             ActiveControl = m_ButtonScan;
         }
 
-        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId="System.Windows.Forms.Control.set_Text(System.String)")]
-        [SuppressMessage("ReSharper", "LocalizableElement")]
         private void CountersReset()
         {
             m_CounterRuns = 0m;
-            m_TextBoxRuns.Text = "0";
+            m_TextBoxRuns.Text = Resources.TextZero;
 
             m_CounterTime = 0m;
-            m_TextBoxTime.Text = "0s";
+            m_TextBoxTime.Text = Resources.TextZeroSeconds;
+        }
+
+        protected override void Dispose(Boolean disposing)
+        {
+            if (disposing)
+                m_Components?.Dispose();
+
+            base.Dispose(disposing);
         }
 
         private void MacroStart()
@@ -1135,7 +1178,42 @@ namespace MacroUO
             ActiveControl = m_ButtonStart;
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (m_PresetsChanged)
+            {
+                try
+                {
+                    DataContractSerializer dcs = new DataContractSerializer(typeof(MacroCollection));
+                    XmlWriterSettings xws = new XmlWriterSettings { Indent = true, IndentChars = "\t" };
+
+                    using (XmlWriter writer = XmlWriter.Create(Program.MacrosFile, xws))
+                    {
+                        writer.WriteStartDocument(true);
+                        dcs.WriteObject(writer, m_Presets);
+                    }
+                }
+                catch
+                {
+                    m_Messenger.DisplayError(Resources.ErrorPresetsSave);
+                }
+            }
+
+            Settings.Default.Save();
+
+            base.OnFormClosing(e);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            ClientsScan();
+            PresetsLoad();
+
+            ActiveControl = m_ButtonStart.Enabled ? m_ButtonStart : m_ButtonScan;
+
+            base.OnLoad(e);
+        }
+
         private void PresetsLoad()
         {
             ActiveControl = null;
@@ -1183,8 +1261,7 @@ namespace MacroUO
             }
             finally
             {
-                if (stream != null)
-                    stream.Dispose();
+                stream?.Dispose();
             }
 
             Int32 presetsCount = m_Presets.Count;
@@ -1248,92 +1325,6 @@ namespace MacroUO
 
             Location = new Point(x, y);
         }
-        #endregion
-
-        #region Methods: Overrides
-        protected override Boolean ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            if (keyData != Keys.F2)
-                return base.ProcessCmdKey(ref msg, keyData);
-
-            if (!m_ComboBoxPresets.Enabled || !m_ComboBoxPresets.Visible || m_ComboBoxPresets.DroppedDown)
-                return true;
-
-            Int32 selectedIndex = m_ComboBoxPresets.SelectedIndex;
-
-            if (selectedIndex < 1)
-                return true;
-
-            Int32 presetIndex = selectedIndex - 1;
-            Macro preset = m_Presets[presetIndex];
-            String presetName = preset.Name;
-            String[] existingNames = m_Presets.GetNames(presetIndex);
-
-            using (RenameDialog dialog = new RenameDialog(presetName, existingNames))
-            {
-                if (dialog.ShowDialog(this) != DialogResult.OK)
-                    return true;
-
-                String newName = dialog.NewName;
-
-                if (newName == presetName)
-                    return true;
-
-                preset.Name = newName;
-                m_PresetsChanged = true;
-
-                m_ComboBoxPresets.BeginUpdate();
-                m_ComboBoxPresets.Items[selectedIndex] = newName;
-                m_ComboBoxPresets.EndUpdate();
-
-                return true;
-            }
-        }
-
-        protected override void Dispose(Boolean disposing)
-        {
-            if (disposing && (m_Components != null))
-                m_Components.Dispose();
-
-            base.Dispose(disposing);
-        }
-
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            if (m_PresetsChanged)
-            {
-                try
-                {
-                    DataContractSerializer dcs = new DataContractSerializer(typeof(MacroCollection));
-                    XmlWriterSettings xws = new XmlWriterSettings { Indent = true, IndentChars = "\t" };
-
-                    using (XmlWriter writer = XmlWriter.Create(Program.MacrosFile, xws))
-                    {
-                        writer.WriteStartDocument(true);
-                        dcs.WriteObject(writer, m_Presets);
-                    }
-                }
-                catch
-                {
-                    m_Messenger.DisplayError(Resources.ErrorPresetsSave);
-                }
-            }
-
-            Settings.Default.Save();
-
-            base.OnFormClosing(e);
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            ClientsScan();
-            PresetsLoad();
-
-            ActiveControl = m_ButtonStart.Enabled ? m_ButtonStart : m_ButtonScan;
-
-            base.OnLoad(e);
-        }
 
         protected override void WndProc(ref Message m)
         {
@@ -1344,38 +1335,21 @@ namespace MacroUO
         }
         #endregion
 
-        #region Nesting: Structures
+        #region Nesting
         private struct Client
         {
-            #region Members: Instance
-            private readonly IntPtr m_WindowHandle;
-            private readonly String m_Name;
-            private readonly UInt32 m_WindowThreadId;
-            #endregion
-
-            #region Properties: Instance
-            public IntPtr WindowHandle
-            {
-                get { return m_WindowHandle; }
-            }
-
-            public String Name
-            {
-                get { return m_Name; }
-            }
-
-            public UInt32 WindowThreadId
-            {
-                get { return m_WindowThreadId; }
-            }
+            #region Properties
+            public IntPtr WindowHandle { get; }
+            public String Name { get; }
+            public UInt32 WindowThreadId { get; }
             #endregion
 
             #region Constructors
             public Client(String name, IntPtr windowHandle, UInt32 windowThreadID)
             {
-                m_WindowHandle = windowHandle;
-                m_Name = name;
-                m_WindowThreadId = windowThreadID;
+                WindowHandle = windowHandle;
+                Name = name;
+                WindowThreadId = windowThreadID;
             }
             #endregion
         }

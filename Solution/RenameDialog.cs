@@ -13,8 +13,7 @@ namespace MacroUO
     [SuppressMessage("ReSharper", "PrivateFieldCanBeConvertedToLocalVariable")]
     public sealed class RenameDialog : Form
     {
-        #region Members: Instance
-        private String m_NewName;
+        #region Members
         private readonly Button m_ButtonCancel;
         private readonly Button m_ButtonOk;
         private readonly Label m_LabelError;
@@ -23,10 +22,7 @@ namespace MacroUO
         #endregion
 
         #region Properties: Instance
-        public String NewName
-        {
-            get { return m_NewName; }
-        }
+        public String NewName { get; private set; }
         #endregion
 
         #region Constructors
@@ -65,7 +61,7 @@ namespace MacroUO
             m_LabelError.TextAlign = ContentAlignment.MiddleCenter;
 
             m_TextBox.Location = new Point(5, 5);
-            m_TextBox.MaxLength = Macro.NameLengthMaximum;
+            m_TextBox.MaxLength = Macro.MAXIMUM_NAME_LENGTH;
             m_TextBox.Name = "TextBox";
             m_TextBox.Size = new Size(226, 20);
             m_TextBox.TabIndex = 0;
@@ -95,10 +91,10 @@ namespace MacroUO
         }
         #endregion
 
-        #region Methods: Events
+        #region Events
         private void ButtonOkClick(Object sender, EventArgs e)
         {
-            m_NewName = m_TextBox.Text;
+            NewName = m_TextBox.Text;
 
             DialogResult = DialogResult.OK;
             Close();
@@ -132,22 +128,16 @@ namespace MacroUO
         }
         #endregion
 
-        #region Methods: Overloads
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        [SuppressMessage("ReSharper", "UnusedMember.Global")]
+        #region Methods
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new DialogResult ShowDialog()
         {
             return DialogResult.None;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        [SuppressMessage("ReSharper", "UnusedMember.Global")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new void Show() { }
-        #endregion
 
-        #region Methods: Overrides
         protected override void OnLoad(EventArgs e)
         {
             ActiveControl = m_TextBox;

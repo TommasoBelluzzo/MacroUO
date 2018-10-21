@@ -110,10 +110,9 @@ namespace MacroUO
 
         internal static Boolean GetRectangle(IntPtr windowHandle, out Rectangle rectangle)
         {
-            Boolean aeroEnabled;
             RECT nativeRectangle;
 
-            if (DwmIsCompositionEnabled(out aeroEnabled) != 0)
+            if (DwmIsCompositionEnabled(out Boolean aeroEnabled) != 0)
             {
                 OperatingSystem os = Environment.OSVersion;
                 Version osVersion = os.Version;
@@ -247,8 +246,7 @@ namespace MacroUO
 
         internal static UInt32 GetWindowThreadId(IntPtr windowHandle)
         {
-            UInt32 processId;
-            return GetWindowThreadProcessId(windowHandle, out processId);
+            return GetWindowThreadProcessId(windowHandle, out UInt32 _);
         }
 
         internal static UInt32 RegisterMessage(String message)
@@ -306,13 +304,14 @@ namespace MacroUO
         }
         #endregion
 
-        #region Nesting: Delegates
+        #region Nesting (Delegates)
         internal delegate Boolean EnumWindowsProcess(IntPtr windowHandle, IntPtr lParameter);
         internal delegate IntPtr HookProcess(Int32 code, IntPtr wParameter, IntPtr lParameter);
         #endregion
 
-        #region Nesting: Enumerators
+        #region Nesting (Enumerators)
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        [SuppressMessage("ReSharper", "UnusedMember.Global")]
         private enum CWPRET_HOOK : uint
         {
             #region Values
@@ -330,6 +329,7 @@ namespace MacroUO
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        [SuppressMessage("ReSharper", "UnusedMember.Global")]
         private enum DWMWINDOW_ATTRIBUTE : uint
         {
             #region Values
@@ -352,6 +352,7 @@ namespace MacroUO
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        [SuppressMessage("ReSharper", "UnusedMember.Global")]
         private enum HOOK_TYPE : uint
         {
             #region Values
@@ -374,6 +375,7 @@ namespace MacroUO
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        [SuppressMessage("ReSharper", "UnusedMember.Global")]
         private enum MAPVK_TYPE : uint
         {
             #region Values
@@ -386,6 +388,7 @@ namespace MacroUO
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        [SuppressMessage("ReSharper", "UnusedMember.Global")]
         [Flags]
         private enum SETWINDOWPOS_FLAGS : uint
         {
@@ -410,6 +413,7 @@ namespace MacroUO
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        [SuppressMessage("ReSharper", "UnusedMember.Global")]
         private enum SHOWWINDOW_COMMAND
         {
             #region Values
@@ -429,6 +433,7 @@ namespace MacroUO
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        [SuppressMessage("ReSharper", "UnusedMember.Global")]
         private enum WINDOW_MESSAGE : uint
         {
             #region Values
@@ -666,7 +671,7 @@ namespace MacroUO
         }
         #endregion
 
-        #region Nesting: Structures
+        #region Nesting (Structures)
         [SuppressMessage("ReSharper", "FieldCanBeMadeReadOnly.Local")]
         [SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
         [StructLayout(LayoutKind.Sequential)]
@@ -682,7 +687,6 @@ namespace MacroUO
         }
 
         [SuppressMessage("ReSharper", "FieldCanBeMadeReadOnly.Local")]
-        [SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
         [StructLayout(LayoutKind.Sequential)]
         private struct RECT
         {

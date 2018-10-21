@@ -15,7 +15,7 @@ namespace MacroUO
     [SuppressMessage("ReSharper", "PrivateFieldCanBeConvertedToLocalVariable")]
     public sealed class ExceptionDialog : Form
     {
-        #region Members: Instance
+        #region Members
         private readonly Button m_ButtonCopy;
         private readonly Button m_ButtonDetails;
         private readonly Button m_ButtonProceed;
@@ -104,7 +104,7 @@ namespace MacroUO
         }
         #endregion
 
-        #region Methods: Events
+        #region Events
         private void ButtonCopyClick(Object sender, EventArgs e)
         {
             Clipboard.SetText(m_TextBoxDetails.Text);
@@ -151,6 +151,12 @@ namespace MacroUO
             Close();
         }
 
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            e.Graphics.DrawIcon(SystemIcons.Error, 13, 13);
+        }
+
         private void TextBoxKeyDown(Object sender, KeyEventArgs e)
         {
             if ((e.KeyCode == Keys.A) && e.Control)
@@ -158,7 +164,19 @@ namespace MacroUO
         }
         #endregion
 
-        #region Methods: Instance
+        #region Methods
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public new DialogResult ShowDialog()
+        {
+            return DialogResult.None;
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public new DialogResult ShowDialog(IWin32Window owner)
+        {
+            return DialogResult.None;
+        }
+
         public void Prompt()
         {
             Form form = Program.Form;
@@ -173,47 +191,16 @@ namespace MacroUO
 
             base.ShowDialog(form);
         }
-        #endregion
 
-        #region Methods: Overloads
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        [SuppressMessage("ReSharper", "UnusedMember.Global")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public new DialogResult ShowDialog()
-        {
-            return DialogResult.None;
-        }
-
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId="owner")]
-        [SuppressMessage("ReSharper", "UnusedMember.Global")]
-        [SuppressMessage("ReSharper", "UnusedParameter.Global")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public new DialogResult ShowDialog(IWin32Window owner)
-        {
-            return DialogResult.None;
-        }
-
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        [SuppressMessage("ReSharper", "UnusedMember.Global")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new void Show() { }
         #endregion
 
-        #region Methods: Overrides
-        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId="0")]
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-            e.Graphics.DrawIcon(SystemIcons.Error, 13, 13);
-        }
-        #endregion
-
-        #region Methods: Static
+        #region Methods (Static)
         private static String GenerateReport(Exception exception)
         {
             if (exception == null)
-                throw new ArgumentNullException("exception");
+                throw new ArgumentNullException(nameof(exception));
 
             StringBuilder sb = new StringBuilder();
 

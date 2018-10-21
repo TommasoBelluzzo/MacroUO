@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -16,22 +15,13 @@ namespace MacroUO
     [DataContract(Namespace="")]
     public sealed class Macro
     {
-        #region Members: Constant
-        public const Int32 NameLengthMaximum = 30;
-        public const UInt32 DelayMinimum = 100;
-        public const UInt32 DelayMaximum = 60000;
+        #region Constants
+        public const Int32 MAXIMUM_NAME_LENGTH = 30;
+        public const UInt32 MINIMUM_DELAY = 100;
+        public const UInt32 MAXIMUM_DELAY = 60000;
         #endregion
 
-        #region Members: Instance
-        private Boolean m_ModifierAlt;
-        private Boolean m_ModifierCtrl;
-        private Boolean m_ModifierShift;
-        private MacroKey m_Key;
-        private String m_Name;
-        private UInt32 m_Delay;
-        #endregion
-
-        #region Members: Static
+        #region Members (Static)
         private static readonly MacroKey[] s_Keys = 
         {
             new MacroKey(Keys.F1),
@@ -113,40 +103,23 @@ namespace MacroUO
         private static readonly Regex s_RegexName = new Regex(@"^[0-9a-z]+( ?[0-9a-z]+)*$", (RegexOptions.Compiled | RegexOptions.IgnoreCase));
         #endregion
 
-        #region Properties: Instance
+        #region Properties
         [DataMember(IsRequired=true, Name="ModifierALT", Order=2)]
-        public Boolean ModifierAlt
-        {
-            get { return m_ModifierAlt; }
-            set { m_ModifierAlt = value; }
-        }
+        public Boolean ModifierAlt { get; set; }
 
         [DataMember(IsRequired=true, Name="ModifierCTRL", Order=3)]
-        public Boolean ModifierCtrl
-        {
-            get { return m_ModifierCtrl; }
-            set { m_ModifierCtrl = value; }
-        }
+        public Boolean ModifierCtrl { get; set; }
 
         [DataMember(IsRequired=true, Name="ModifierSHIFT", Order=4)]
-        public Boolean ModifierShift
-        {
-            get { return m_ModifierShift; }
-            set { m_ModifierShift = value; }
-        }
+        public Boolean ModifierShift { get; set; }
 
-        public MacroKey Key
-        {
-            get { return m_Key; }
-            set { m_Key = value; }
-        }
+        public MacroKey Key { get; set; }
 
-        [SuppressMessage("ReSharper", "InvertIf")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DataMember(IsRequired=true, Name="Key", Order=1)]
         public String KeyProxy
         {
-            get { return m_Key.Name; }
+            get => Key.Name;
             set
             {
                 for (Int32 i = 0; i < s_Keys.Length; ++i)
@@ -155,32 +128,23 @@ namespace MacroUO
 
                     if (current.Name == value)
                     {
-                        m_Key = current;
+                        Key = current;
                         return;
                     }
                 }
 
-                m_Key = new MacroKey(Keys.None, value);
+                Key = new MacroKey(Keys.None, value);
             }
         }
 
         [DataMember(IsRequired=true, Name="Name", Order=0)]
-        public String Name
-        {
-            get { return m_Name; }
-            set { m_Name = value; }
-        }
+        public String Name { get; set; }
 
         [DataMember(IsRequired=true, Name="Delay", Order=5)]
-        public UInt32 Delay
-        {
-            get { return m_Delay; }
-            set { m_Delay = value; }
-        }
+        public UInt32 Delay { get; set; }
         #endregion
 
-        #region Methods: Static
-
+        #region Methods (Static)
         public static Boolean ValidateName(String name)
         {
             return s_RegexName.IsMatch(name);
@@ -202,7 +166,7 @@ namespace MacroUO
     [CollectionDataContract(ItemName="Macro", Name="Macros", Namespace="")]
     public sealed class MacroCollection : List<Macro>
     {
-        #region Methods: Instance
+        #region Methods
         public String Validate()
         {
             for (Int32 i = 0; i < Count; ++i)
@@ -216,8 +180,8 @@ namespace MacroUO
                 if (!Macro.ValidateName(presetName))
                     return String.Format(CultureInfo.CurrentCulture, Resources.ErrorPresetsFileNameInvalid, presetName, (i + 1).ToOrdinal());
 
-                if (presetName.Length > Macro.NameLengthMaximum)
-                    return String.Format(CultureInfo.CurrentCulture, Resources.ErrorPresetsFileNameLength, presetName, (i + 1).ToOrdinal(), Macro.NameLengthMaximum);
+                if (presetName.Length > Macro.MAXIMUM_NAME_LENGTH)
+                    return String.Format(CultureInfo.CurrentCulture, Resources.ErrorPresetsFileNameLength, presetName, (i + 1).ToOrdinal(), Macro.MAXIMUM_NAME_LENGTH);
 
                 for (Int32 j = 0; j < i; ++j)
                 {
@@ -230,8 +194,8 @@ namespace MacroUO
 
                 UInt32 presetDelay = preset.Delay;
 
-                if ((presetDelay < Macro.DelayMinimum) || (presetDelay > Macro.DelayMaximum))
-                    return String.Format(CultureInfo.CurrentCulture, Resources.ErrorPresetsFileDelay, presetDelay, presetName, Macro.DelayMinimum, Macro.DelayMaximum);
+                if ((presetDelay < Macro.MINIMUM_DELAY) || (presetDelay > Macro.MAXIMUM_DELAY))
+                    return String.Format(CultureInfo.CurrentCulture, Resources.ErrorPresetsFileDelay, presetDelay, presetName, Macro.MINIMUM_DELAY, Macro.MAXIMUM_DELAY);
             }
 
             return null;
@@ -268,76 +232,50 @@ namespace MacroUO
 
     public sealed class MacroRunning : IEquatable<MacroRunning>
     {
-        #region Members: Instance
-        private Decimal m_Runs;
-        private readonly IntPtr m_WindowHandle;
-        private readonly UInt32 m_Key;
-        private readonly UInt32 m_Modifiers;
-        private readonly UInt32 m_WindowThreadID;
-        #endregion
+        #region Properties
+        public Decimal Runs { get; set; }
 
-        #region Properties: Instance
-        public Decimal Runs
-        {
-            get { return m_Runs; }
-            set { m_Runs = value; }
-        }
+        public IntPtr WindowHandle { get; }
 
-        public IntPtr WindowHandle
-        {
-            get { return m_WindowHandle; }
-        }
+        public UInt32 KeyCode { get; }
 
-        public UInt32 KeyCode
-        {
-            get { return m_Key; }
-        }
+        public UInt32 Modifiers { get; }
 
-        public UInt32 Modifiers
-        {
-            get { return m_Modifiers; }
-        }
-
-        public UInt32 WindowThreadId
-        {
-            get { return m_WindowThreadID; }
-        }
+        public UInt32 WindowThreadId { get; }
         #endregion
 
         #region Constructors
         public MacroRunning(IntPtr windowHandle, UInt32 windowThreadId, UInt32 keyCode, UInt32 modifiers, Decimal runs)
         {
-            m_Runs = runs;
-            m_WindowHandle = windowHandle;
-            m_Key = keyCode;
-            m_Modifiers = modifiers;
-            m_WindowThreadID = windowThreadId;
+            Runs = runs;
+            WindowHandle = windowHandle;
+            KeyCode = keyCode;
+            Modifiers = modifiers;
+            WindowThreadId = windowThreadId;
         }
         #endregion
 
-        #region Methods: IEquatable
-        public Boolean Equals(MacroRunning other)
-        {
-            if (ReferenceEquals(null, other))
-                return false;
-
-            return ((m_WindowHandle == other.WindowHandle) && (m_Key == other.KeyCode) && (m_Modifiers == other.Modifiers));
-        }
-        #endregion
-
-        #region Methods: Operators
+        #region Operators
         public static Boolean operator ==(MacroRunning left, MacroRunning right)
         {
-            return (ReferenceEquals(null, left) ? ReferenceEquals(null, right) : left.Equals(right));
+            return left?.Equals(right) ?? (right is null);
         }
 
         public static Boolean operator !=(MacroRunning left, MacroRunning right)
         {
-            return (ReferenceEquals(null, left) ? !ReferenceEquals(null, right) : !left.Equals(right));
+            return !left?.Equals(right) ?? !(right is null);
         }
         #endregion
 
-        #region Methods: Overrides
+        #region Methods
+        public Boolean Equals(MacroRunning other)
+        {
+            if (other is null)
+                return false;
+
+            return ((WindowHandle == other.WindowHandle) && (KeyCode == other.KeyCode) && (Modifiers == other.Modifiers));
+        }
+
         public override Boolean Equals(Object obj)
         {
             return Equals(obj as MacroRunning);
@@ -348,9 +286,9 @@ namespace MacroUO
             unchecked
             {
                 Int32 hash = (Int32)2166136261;
-                hash = (hash * 16777619) ^ m_WindowHandle.GetHashCode();
-                hash = (hash * 16777619) ^ m_Key.GetHashCode();
-                hash = (hash * 16777619) ^ m_Modifiers.GetHashCode();
+                hash = (hash * 16777619) ^ WindowHandle.GetHashCode();
+                hash = (hash * 16777619) ^ KeyCode.GetHashCode();
+                hash = (hash * 16777619) ^ Modifiers.GetHashCode();
 
                 return hash;
             }
@@ -360,21 +298,10 @@ namespace MacroUO
 
     public struct MacroKey : IEquatable<MacroKey>
     {
-        #region Members: Instance
-        private readonly String m_Name;
-        private readonly UInt32 m_Code;
-        #endregion
+        #region Properties
+        public String Name { get; }
 
-        #region Properties: Instance
-        public String Name
-        {
-            get { return m_Name; }
-        }
-
-        public UInt32 Code
-        {
-            get { return m_Code; }
-        }
+        public UInt32 Code { get; }
         #endregion
 
         #region Constructors
@@ -382,25 +309,18 @@ namespace MacroUO
         {
             String name = Enum.GetName(typeof(Keys), key);
 
-            m_Name = ((name != null) ? name.ToUpper(CultureInfo.CurrentCulture) : String.Empty);
-            m_Code = (UInt32)key;
+            Name = ((name != null) ? name.ToUpper(CultureInfo.CurrentCulture) : String.Empty);
+            Code = (UInt32)key;
         }
 
         public MacroKey(Keys key, String name)
         {
-            m_Name = name;
-            m_Code = (UInt32)key;
+            Name = name;
+            Code = (UInt32)key;
         }
         #endregion
 
-        #region Methods: IEquatable
-        public Boolean Equals(MacroKey other)
-        {
-            return ((m_Name == other.Name) && (m_Code == other.Code));
-        }
-        #endregion
-
-        #region Methods: Operators
+        #region Operators
         public static Boolean operator ==(MacroKey left, MacroKey right)
         {
             return left.Equals(right);
@@ -412,10 +332,15 @@ namespace MacroUO
         }
         #endregion
 
-        #region Methods: Overrides
+        #region Methods
+        public Boolean Equals(MacroKey other)
+        {
+            return ((Name == other.Name) && (Code == other.Code));
+        }
+
         public override Boolean Equals(Object obj)
         {
-            return ((obj is MacroKey) && Equals((MacroKey)obj));
+            return ((obj is MacroKey key) && Equals(key));
         }
 
         public override Int32 GetHashCode()
@@ -423,8 +348,8 @@ namespace MacroUO
             unchecked
             {
                 Int32 hash = (Int32)2166136261;
-                hash = (hash * 16777619) ^ m_Name.GetHashCode();
-                hash = (hash * 16777619) ^ m_Code.GetHashCode();
+                hash = (hash * 16777619) ^ Name.GetHashCode();
+                hash = (hash * 16777619) ^ Code.GetHashCode();
 
                 return hash;
             }
@@ -432,7 +357,7 @@ namespace MacroUO
 
         public override String ToString()
         {
-            return m_Name;
+            return Name;
         }
         #endregion
     }

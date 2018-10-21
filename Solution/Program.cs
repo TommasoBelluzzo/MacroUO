@@ -1,6 +1,5 @@
 ﻿#region Using Directives
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -15,44 +14,23 @@ namespace MacroUO
 {
     public static class Program
     {
-        #region Members: Static
-        private static ApplicationDialog s_Form;
-        private static Icon s_Icon;
+        #region Members
         private static Mutex s_Mutex;
-        private static String s_MacrosFile;
-        private static String s_Version;
-        private static UInt32 s_MutexMessage;
         #endregion
 
-        #region Properties: Static
-        public static ApplicationDialog Form
-        {
-            get { return s_Form; }
-        }
+        #region Properties
+        public static ApplicationDialog Form { get; private set; }
 
-        public static Icon Icon
-        {
-            get { return s_Icon; }
-        }
+        public static Icon Icon { get; private set; }
 
-        public static String MacrosFile
-        {
-            get { return s_MacrosFile; }
-        }
+        public static String MacrosFile { get; private set; }
 
-        public static String Version
-        {
-            get { return s_Version; }
-        }
+        public static String Version { get; private set; }
 
-        public static UInt32 MutexMessage
-        {
-            get { return s_MutexMessage; }
-        }
+        public static UInt32 MutexMessage { get; private set; }
         #endregion
 
-        #region Methods: Entry Point
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        #region Entry Point
         [STAThread]
         public static void Main()
         {
@@ -64,32 +42,34 @@ namespace MacroUO
             String assemblyGuid = ((GuidAttribute)assembly.GetCustomAttributes(typeof(GuidAttribute), true)[0]).Value;
             String mutexName = String.Format(CultureInfo.InvariantCulture, @"Local\{{{0}}}", assemblyGuid);
 
-            Boolean mutexCreated;
-
-            s_MutexMessage = NativeMethods.RegisterMessage(assemblyGuid);
-            s_Mutex = new Mutex(true, mutexName, out mutexCreated);
+            MutexMessage = NativeMethods.RegisterMessage(assemblyGuid);
+            s_Mutex = new Mutex(true, mutexName, out Boolean mutexCreated);
 
             if (!mutexCreated)
             {
-                NativeMethods.BroadcastMessage(s_MutexMessage);
+                NativeMethods.BroadcastMessage(MutexMessage);
                 return;
             }
 
-            Version programVersion = assembly.GetName().Version;
+            Stream stream = assembly.GetManifestResourceStream("MacroUO.Properties.Application.ico");
 
-            s_Icon = new Icon(assembly.GetManifestResourceStream("MacroUO.Properties.Application.ico"));
-            s_MacrosFile = Path.Combine(Application.StartupPath, "Presets.xml");
-            s_Version = String.Concat("v", programVersion.Major, ".", programVersion.Minor);
+            if (stream != null)
+                Icon = new Icon(stream);
+
+            MacrosFile = Path.Combine(Application.StartupPath, "Presets.xml");
+
+            Version programVersion = assembly.GetName().Version;
+            Version = String.Concat("v", programVersion.Major, ".", programVersion.Minor);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(s_Form = new ApplicationDialog());
+            Application.Run(Form = new ApplicationDialog());
 
             s_Mutex.ReleaseMutex();
         }
         #endregion
 
-        #region Methods: Events
+        #region Events
         private static void ThreadException(Object sender, ThreadExceptionEventArgs e)
         {
             HandleException(e.Exception);
@@ -101,8 +81,7 @@ namespace MacroUO
         }
         #endregion
 
-        #region Methods: Static
-        [SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
+        #region Methods
         private static void HandleException(Exception e)
         {
             if (e == null)

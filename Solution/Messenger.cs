@@ -2,7 +2,6 @@
 using System;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,42 +13,29 @@ namespace MacroUO
     [ToolboxItem(true)]
     public sealed class Messenger : Component
     {
-        #region Members: Instance
-        private ContainerControl m_ContainerControl;
+        #region Members
         private IntPtr m_HookHandle;
         #endregion
 
-        #region Members: Static
+        #region Members (Static)
         private static NativeMethods.HookProcess s_HookProcessDelegate;
         #endregion
 
-        #region Properties: Instance
-        [SuppressMessage("ReSharper", "UnusedMember.Global")]
+        #region Properties
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public ContainerControl ContainerControl
-        {
-            get { return m_ContainerControl; }
-            set { m_ContainerControl = value; }
-        }
-        #endregion
+        public ContainerControl ContainerControl { get; set; }
 
-        #region Properties: Overrides
         public override ISite Site
         {
-            get { return base.Site; }
+            get => base.Site;
             set
             {
                 base.Site = value;
 
-                if (value == null)
+                if (!(value?.GetService(typeof(IDesignerHost)) is IDesignerHost service))
                     return;
 
-                IDesignerHost service = value.GetService(typeof(IDesignerHost)) as IDesignerHost;
-
-                if (service == null)
-                    return;
-
-                m_ContainerControl = service.RootComponent as ContainerControl;
+                ContainerControl = service.RootComponent as ContainerControl;
             }
         }
         #endregion
@@ -60,21 +46,19 @@ namespace MacroUO
         public Messenger(IContainer container) : this()
         {
             if (container == null)
-                throw new ArgumentNullException("container");
+                throw new ArgumentNullException(nameof(container));
 
             container.Add(this);
         }
         #endregion
 
-        #region Methods: Events
+        #region Events
         private IntPtr HookProcessDialog(Int32 code, IntPtr wParameter, IntPtr lParameter)
         {
             if (code < 0)
                 return NativeMethods.NextHook(m_HookHandle, code, wParameter, lParameter);
 
-            IntPtr windowHandle;
-
-            if (!NativeMethods.HookedInitialize(lParameter, out windowHandle))
+            if (!NativeMethods.HookedInitialize(lParameter, out IntPtr windowHandle))
                 return NativeMethods.NextHook(m_HookHandle, code, wParameter, lParameter);
 
             try
@@ -94,9 +78,7 @@ namespace MacroUO
             if (code < 0)
                 return NativeMethods.NextHook(m_HookHandle, code, wParameter, lParameter);
 
-            IntPtr windowHandle;
-
-            if (!NativeMethods.HookedActivate(lParameter, out windowHandle))
+            if (!NativeMethods.HookedActivate(lParameter, out IntPtr windowHandle))
                 return NativeMethods.NextHook(m_HookHandle, code, wParameter, lParameter);
 
             try
@@ -112,33 +94,19 @@ namespace MacroUO
         }
         #endregion
 
-        #region Methods: Overrides
-        protected override void Dispose(Boolean disposing)
-        {
-            if (disposing)
-                HookDisable();
-
-            base.Dispose(disposing);
-        }
-        #endregion
-
-        #region Methods: Instance
+        #region Methods
         private Boolean DisplayYesNoMessage(MessageBoxIcon icon, String text, MessageBoxDefaultButton defaultButton)
         {
             HookEnable(HookProcessMessageBox);
-            return (MessageBox.Show(m_ContainerControl, text, GetIconText(icon), MessageBoxButtons.YesNo, icon, defaultButton, 0) == DialogResult.Yes);
+            return (MessageBox.Show(ContainerControl, text, GetIconText(icon), MessageBoxButtons.YesNo, icon, defaultButton, 0) == DialogResult.Yes);
         }
 
         private void CenterWindow(IntPtr childHandle)
         {
-            Rectangle parentArea;
-
-            if (!NativeMethods.GetRectangle(m_ContainerControl.Handle, out parentArea))
+            if (!NativeMethods.GetRectangle(ContainerControl.Handle, out Rectangle parentArea))
                 return;
 
-            Rectangle childArea;
-
-            if (!NativeMethods.GetRectangle(childHandle, out childArea))
+            if (!NativeMethods.GetRectangle(childHandle, out Rectangle childArea))
                 return;
 
             Rectangle areaScreen = Screen.FromRectangle(parentArea).WorkingArea;
@@ -177,7 +145,15 @@ namespace MacroUO
         private void DisplayOkMessage(MessageBoxIcon icon, String text)
         {
             HookEnable(HookProcessMessageBox);
-            MessageBox.Show(m_ContainerControl, text, GetIconText(icon), MessageBoxButtons.OK, icon, MessageBoxDefaultButton.Button1, 0);
+            MessageBox.Show(ContainerControl, text, GetIconText(icon), MessageBoxButtons.OK, icon, MessageBoxDefaultButton.Button1, 0);
+        }
+
+        protected override void Dispose(Boolean disposing)
+        {
+            if (disposing)
+                HookDisable();
+
+            base.Dispose(disposing);
         }
 
         private void HookDisable()
@@ -200,11 +176,10 @@ namespace MacroUO
             m_HookHandle = NativeMethods.Hook(s_HookProcessDelegate);
         }
 
-        [SuppressMessage("ReSharper", "UnusedMember.Global")]
         public Boolean DisplayDialog(CommonDialog dialog)
         {
             if (dialog == null)
-                throw new ArgumentNullException("dialog");
+                throw new ArgumentNullException(nameof(dialog));
 
             HookEnable(HookProcessDialog);
 
@@ -217,7 +192,6 @@ namespace MacroUO
             return DisplayYesNoMessage(MessageBoxIcon.Warning, text, MessageBoxDefaultButton.Button2);
         }
 
-        [SuppressMessage("ReSharper", "UnusedMember.Global")]
         public Boolean DisplayQuestionStandard(String text)
         {
             return DisplayYesNoMessage(MessageBoxIcon.Question, text, MessageBoxDefaultButton.Button1);
@@ -228,20 +202,18 @@ namespace MacroUO
             DisplayOkMessage(MessageBoxIcon.Error, text);
         }
 
-        [SuppressMessage("ReSharper", "UnusedMember.Global")]
         public void DisplayInformation(String text)
         {
             DisplayOkMessage(MessageBoxIcon.Information, text);
         }
 
-        [SuppressMessage("ReSharper","UnusedMember.Global")]
         public void DisplayWarning(String text)
         {
             DisplayOkMessage(MessageBoxIcon.Warning, text);
         }
         #endregion
 
-        #region Methods: Static
+        #region Methods (Static)
         private static String GetIconText(MessageBoxIcon icon)
         {
             switch (icon)
