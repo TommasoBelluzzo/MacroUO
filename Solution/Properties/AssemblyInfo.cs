@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("Release Build")]
 #endif
 
-[assembly: AssemblyCopyright("Copyright ©2010-2018 Tommaso Belluzzo")]
+[assembly: AssemblyCopyright("Copyright ©2010 Tommaso Belluzzo")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyProduct("MacroUO")]
 [assembly: AssemblyTitle("MacroUO")]
