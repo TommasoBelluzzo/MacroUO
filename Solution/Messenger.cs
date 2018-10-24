@@ -56,10 +56,10 @@ namespace MacroUO
         private IntPtr HookProcessDialog(Int32 code, IntPtr wParameter, IntPtr lParameter)
         {
             if (code < 0)
-                return NativeMethods.NextHook(m_HookHandle, code, wParameter, lParameter);
+                return NativeMethods.HookNext(m_HookHandle, code, wParameter, lParameter);
 
-            if (!NativeMethods.HookedInitialize(lParameter, out IntPtr windowHandle))
-                return NativeMethods.NextHook(m_HookHandle, code, wParameter, lParameter);
+            if (!NativeMethods.HookInitialize(lParameter, out IntPtr windowHandle))
+                return NativeMethods.HookNext(m_HookHandle, code, wParameter, lParameter);
 
             try
             {
@@ -70,16 +70,16 @@ namespace MacroUO
                 HookDisable();
             }
 
-            return NativeMethods.NextHook(m_HookHandle, code, wParameter, lParameter);
+            return NativeMethods.HookNext(m_HookHandle, code, wParameter, lParameter);
         }
 
         private IntPtr HookProcessMessageBox(Int32 code, IntPtr wParameter, IntPtr lParameter)
         {
             if (code < 0)
-                return NativeMethods.NextHook(m_HookHandle, code, wParameter, lParameter);
+                return NativeMethods.HookNext(m_HookHandle, code, wParameter, lParameter);
 
-            if (!NativeMethods.HookedActivate(lParameter, out IntPtr windowHandle))
-                return NativeMethods.NextHook(m_HookHandle, code, wParameter, lParameter);
+            if (!NativeMethods.HookActivate(lParameter, out IntPtr windowHandle))
+                return NativeMethods.HookNext(m_HookHandle, code, wParameter, lParameter);
 
             try
             {
@@ -90,7 +90,7 @@ namespace MacroUO
                 HookDisable();
             }
 
-            return NativeMethods.NextHook(m_HookHandle, code, wParameter, lParameter);
+            return NativeMethods.HookNext(m_HookHandle, code, wParameter, lParameter);
         }
         #endregion
 
