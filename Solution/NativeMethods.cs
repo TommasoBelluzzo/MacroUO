@@ -164,7 +164,7 @@ namespace MacroUO
             return true;
         }
 
-        public static Boolean HookedActivate(IntPtr lParameter, out IntPtr windowHandle)
+        public static Boolean HookActivate(IntPtr lParameter, out IntPtr windowHandle)
         {
             CWPRET_STRUCT parameters = (CWPRET_STRUCT)Marshal.PtrToStructure(lParameter, typeof(CWPRET_STRUCT));
 
@@ -178,7 +178,7 @@ namespace MacroUO
             return true;
         }
 
-        public static Boolean HookedInitialize(IntPtr lParameter, out IntPtr windowHandle)
+        public static Boolean HookInitialize(IntPtr lParameter, out IntPtr windowHandle)
         {
             CWPRET_STRUCT parameters = (CWPRET_STRUCT)Marshal.PtrToStructure(lParameter, typeof(CWPRET_STRUCT));
 
@@ -221,7 +221,7 @@ namespace MacroUO
             return ((threadId == 0) ? IntPtr.Zero : SetWindowsHookEx(HOOK_TYPE.WH_CALLWNDPROCRET, process, IntPtr.Zero, threadId));
         }
 
-        public static IntPtr NextHook(IntPtr handle, Int32 code, IntPtr wParameter, IntPtr lParameter)
+        public static IntPtr HookNext(IntPtr handle, Int32 code, IntPtr wParameter, IntPtr lParameter)
         {
             return CallNextHookEx(handle, code, wParameter, lParameter);
         }
