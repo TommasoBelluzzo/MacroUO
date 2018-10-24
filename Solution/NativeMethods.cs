@@ -108,7 +108,7 @@ namespace MacroUO
             return (UInt32)Marshal.SizeOf(type);
         }
 
-        internal static Boolean GetRectangle(IntPtr windowHandle, out Rectangle rectangle)
+        public static Boolean GetRectangle(IntPtr windowHandle, out Rectangle rectangle)
         {
             RECT nativeRectangle;
 
@@ -164,7 +164,7 @@ namespace MacroUO
             return true;
         }
 
-        internal static Boolean HookedActivate(IntPtr lParameter, out IntPtr windowHandle)
+        public static Boolean HookedActivate(IntPtr lParameter, out IntPtr windowHandle)
         {
             CWPRET_STRUCT parameters = (CWPRET_STRUCT)Marshal.PtrToStructure(lParameter, typeof(CWPRET_STRUCT));
 
@@ -178,7 +178,7 @@ namespace MacroUO
             return true;
         }
 
-        internal static Boolean HookedInitialize(IntPtr lParameter, out IntPtr windowHandle)
+        public static Boolean HookedInitialize(IntPtr lParameter, out IntPtr windowHandle)
         {
             CWPRET_STRUCT parameters = (CWPRET_STRUCT)Marshal.PtrToStructure(lParameter, typeof(CWPRET_STRUCT));
 
@@ -192,17 +192,17 @@ namespace MacroUO
             return true;
         }
 
-        internal static Boolean IsValidWindow(IntPtr windowHandle)
+        public static Boolean IsValidWindow(IntPtr windowHandle)
         {
             return IsWindow(windowHandle);
         }
 
-        internal static Boolean ThreadInputAttach(UInt32 threadIdFrom, UInt32 threadIdTo)
+        public static Boolean ThreadInputAttach(UInt32 threadIdFrom, UInt32 threadIdTo)
         {
             return AttachThreadInput(threadIdFrom, threadIdTo, true);
         }
 
-        internal static Byte[] GetKeyboardState()
+        public static Byte[] GetKeyboardState()
         {
             Byte[] state = new Byte[256];
             GetKeyboardState(state);
@@ -210,66 +210,66 @@ namespace MacroUO
             return state;
         }
 
-        internal static IntPtr GetKeyboardLayout()
+        public static IntPtr GetKeyboardLayout()
         {
             return GetKeyboardLayout(GetCurrentThreadId());
         }
 
-        internal static IntPtr Hook(HookProcess process)
+        public static IntPtr Hook(HookProcess process)
         {
             UInt32 threadId = GetCurrentThreadId();
             return ((threadId == 0) ? IntPtr.Zero : SetWindowsHookEx(HOOK_TYPE.WH_CALLWNDPROCRET, process, IntPtr.Zero, threadId));
         }
 
-        internal static IntPtr NextHook(IntPtr handle, Int32 code, IntPtr wParameter, IntPtr lParameter)
+        public static IntPtr NextHook(IntPtr handle, Int32 code, IntPtr wParameter, IntPtr lParameter)
         {
             return CallNextHookEx(handle, code, wParameter, lParameter);
         }
 
-        internal static String GetWindowClass(IntPtr windowHandle)
+        public static String GetWindowClass(IntPtr windowHandle)
         {
             StringBuilder buffer = new StringBuilder(256);
 
             return ((GetClassName(windowHandle, buffer, buffer.Capacity) == 0) ? String.Empty : buffer.ToString().Trim());
         }
 
-        internal static String GetWindowText(IntPtr windowHandle)
+        public static String GetWindowText(IntPtr windowHandle)
         {
             StringBuilder buffer = new StringBuilder(1024);
             return ((GetWindowText(windowHandle, buffer, buffer.Capacity) == 0) ? String.Empty : buffer.ToString().Trim());
         }
 
-        internal static UInt32 GetThreadId()
+        public static UInt32 GetThreadId()
         {
             return GetCurrentThreadId();
         }
 
-        internal static UInt32 GetWindowThreadId(IntPtr windowHandle)
+        public static UInt32 GetWindowThreadId(IntPtr windowHandle)
         {
             return GetWindowThreadProcessId(windowHandle, out UInt32 _);
         }
 
-        internal static UInt32 RegisterMessage(String message)
+        public static UInt32 RegisterMessage(String message)
         {
             return RegisterWindowMessage(message);
         }
 
-        internal static void BroadcastMessage(UInt32 message)
+        public static void BroadcastMessage(UInt32 message)
         {
             PostMessage((new IntPtr(0xFFFF)), message, IntPtr.Zero, IntPtr.Zero);
         }
 
-        internal static void EnumerateWindows(EnumWindowsProcess enumWindowsProcess)
+        public static void EnumerateWindows(EnumWindowsProcess enumWindowsProcess)
         {
             EnumWindows(enumWindowsProcess, IntPtr.Zero);
         }
 
-        internal static void KeyboardState(Byte[] state)
+        public static void KeyboardState(Byte[] state)
         {
             SetKeyboardState(state);
         }
 
-        internal static void Restore(Form form)
+        public static void Restore(Form form)
         {
             if (form == null)
                 return;
@@ -282,31 +282,31 @@ namespace MacroUO
             SetForegroundWindow(handle);
         }
 
-        internal static void SendKeyDown(IntPtr windowHandle, IntPtr keyboardLayoutHandle, UInt32 key)
+        public static void SendKeyDown(IntPtr windowHandle, IntPtr keyboardLayoutHandle, UInt32 key)
         {
             UInt32 scanCode = (1 | (MapVirtualKeyEx(key, MAPVK_TYPE.MAPVK_VK_TO_VSC, keyboardLayoutHandle) << 16));
             SendMessage(windowHandle, (UInt32)WINDOW_MESSAGE.WM_KEYDOWN, (IntPtr)key, (IntPtr)scanCode);
         }
 
-        internal static void SetPosition(IntPtr windowHandle, Rectangle rectangle)
+        public static void SetPosition(IntPtr windowHandle, Rectangle rectangle)
         {
             SetWindowPos(windowHandle, IntPtr.Zero, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, SETWINDOWPOS_FLAGS.SWP_DEFAULT);
         }
 
-        internal static void ThreadInputDetach(UInt32 threadIdFrom, UInt32 threadIdTo)
+        public static void ThreadInputDetach(UInt32 threadIdFrom, UInt32 threadIdTo)
         {
             AttachThreadInput(threadIdFrom, threadIdTo, false);
         }
 
-        internal static void Unhook(IntPtr hookHandle)
+        public static void Unhook(IntPtr hookHandle)
         {
             UnhookWindowsHookEx(hookHandle);
         }
         #endregion
 
         #region Nesting (Delegates)
-        internal delegate Boolean EnumWindowsProcess(IntPtr windowHandle, IntPtr lParameter);
-        internal delegate IntPtr HookProcess(Int32 code, IntPtr wParameter, IntPtr lParameter);
+        public delegate Boolean EnumWindowsProcess(IntPtr windowHandle, IntPtr lParameter);
+        public delegate IntPtr HookProcess(Int32 code, IntPtr wParameter, IntPtr lParameter);
         #endregion
 
         #region Nesting (Enumerators)
