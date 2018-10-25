@@ -42,9 +42,9 @@ All the changes to the preset macros are automatically saved when MacroUO is clo
 
 On the bottom of the window there are three buttons. The `Start` button activates the process that executes the specified macro on the target client, while the `Stop` button interrupts it. The `Collapse` button reduces the MacroUO window size, while the `Expand` button restores it.
 
-### Code
+### Source Code
 
-The source code is completely undocumented and has no descriptive comments; I know it's a bad practice, but I really don't have time to create a proper documentation. Nevertheless, everything should be pretty straightforward since it's just a simple form with a few buttons.
+The methods and classes are completely undocumented and the code contains no descriptive comments; I know it's a bad practice, but I really don't have time to create a proper documentation for this project. Nevertheless, everything should be pretty straightforward since it's just a simple form with a few buttons.
 
 The following method (which can be found within the `ApplicationDialog` class):
 
