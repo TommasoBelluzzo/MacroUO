@@ -6,7 +6,7 @@ Inspired by UO Loop, MacroUO is a simple third party macro utility for Ultima On
 
 ### Compatibility
 
-MacroUO can run on every machine equipped with sWindows 7 or greater.
+MacroUO can run on every machine equipped with Windows 7 or greater.
 
 ### Usage
 
