@@ -1,6 +1,6 @@
 # MacroUO
 
-Inspired by UO Loop, MacroUO is a simple third party automation/macro utility for Ultima Online. I am still maintaining it because a lot of people I know are still playing Ultima Online and, over the past years, it became very popular on some servers.
+Inspired by UO Loop, MacroUO is a simple third party macro utility for Ultima Online. I am still maintaining it because a lot of people I know are still playing Ultima Online and, over the past years, it became very popular on some servers.
 
 ## Documentation
 
@@ -68,4 +68,4 @@ private Boolean EnumerateWindow(IntPtr windowHandle, IntPtr lParameter)
 	return true;
 }
 ```
-helps MacroUO to identify active Ultima Online clients on which macros can be executed. Making modifications to `windowClass` and `windowText` conditions would allow MacroUO to work on other games or applications. Removing the aforementioned conditions would transform it into a universal macro tool.
+helps MacroUO to identify active Ultima Online clients on which macros can be executed. Making modifications to `windowClass` and `windowText` conditions would allow MacroUO to work on other games or applications. Removing the aforementioned conditions would transform it into a universal input automation tool.
