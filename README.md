@@ -6,6 +6,8 @@ Inspired by UO Loop, MacroUO is a simple third party macro utility for Ultima On
 
 ### Usage
 
+[!Interface](https://i.imgur.com/oifLOCC.png)
+
 #### Options
 
 Two different interface options can be toggled on and off through the menu bar. The `TopMost` option forces the MacroUO window to overlap all the other windows, even when it's not active. The `Transparency` option makes the MacroUO window slightly transparent.
