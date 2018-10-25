@@ -6,7 +6,7 @@ Inspired by UO Loop, MacroUO is a simple third party macro utility for Ultima On
 
 ### Usage
 
-[!Interface](https://i.imgur.com/oifLOCC.png)
+![Interface](https://i.imgur.com/oifLOCC.png)
 
 #### Options
 
