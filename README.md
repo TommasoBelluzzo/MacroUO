@@ -4,7 +4,7 @@ Inspired by UO Loop, MacroUO is a simple third party macro utility for Ultima On
 
 ## Requirements
 
-MacroUO can run on every machine equipped with Windows 7 or greater.
+MacroUO is platform-agnostic, therefore it can be used on both x86 and x64 environments. The solution model targets Visual Studio 2017 and the projects are compiled under .NET Framework 4.7.1, therefore it can run on every machine equipped with Windows 7 or greater.
 
 ## Usage
 
