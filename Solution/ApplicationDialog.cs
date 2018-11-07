@@ -1,4 +1,4 @@
-﻿#region Using Directives
+#region Using Directives
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -1335,7 +1335,7 @@ namespace MacroUO
         }
         #endregion
 
-        #region Nesting
+        #region Nesting (Structures)
         private struct Client
         {
             #region Properties
