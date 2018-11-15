@@ -15,7 +15,9 @@ namespace MacroUO
     public static class Program
     {
         #region Members
+        private static Boolean s_ExceptionHandled;
         private static Mutex s_Mutex;
+        private static Object s_Lock;
         #endregion
 
         #region Properties
@@ -50,6 +52,8 @@ namespace MacroUO
                 NativeMethods.BroadcastMessage(MutexMessage);
                 return;
             }
+            
+            s_Lock = new Object();
 
             Stream stream = assembly.GetManifestResourceStream("MacroUO.Properties.Application.ico");
 
@@ -84,13 +88,21 @@ namespace MacroUO
         #region Methods
         private static void HandleException(Exception e)
         {
-            if (e == null)
-                e = new ApplicationException(Resources.TextUnknownException);
+            lock (s_Lock)
+            {
+                if (s_ExceptionHandled)
+                    return;
 
-            using (ExceptionDialog dialog = new ExceptionDialog(e))
-                dialog.Prompt();
+                s_ExceptionHandled = true;
 
-            Application.Exit();
+                if (e == null)
+                    e = new Exception(Resources.ErrorUnhandledException);
+
+                using (ExceptionDialog dialog = new ExceptionDialog(e))
+                    dialog.Prompt();
+
+                Application.Exit();
+            }
         }
         #endregion
     }
