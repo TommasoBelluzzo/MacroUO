@@ -23,6 +23,8 @@ namespace MacroUO
         #region Properties
         public static ApplicationDialog Form { get; private set; }
 
+        public static Assembly Assembly { get; private set; }
+
         public static Icon Icon { get; private set; }
 
         public static String MacrosFile { get; private set; }
@@ -40,11 +42,12 @@ namespace MacroUO
             AppDomain.CurrentDomain.UnhandledException += UnhandledException;
             Application.ThreadException += ThreadException;
 
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            String assemblyGuid = ((GuidAttribute)assembly.GetCustomAttributes(typeof(GuidAttribute), true)[0]).Value;
-            String mutexName = String.Format(CultureInfo.InvariantCulture, @"Local\{{{0}}}", assemblyGuid);
+            Assembly = Assembly.GetExecutingAssembly();
 
+            String assemblyGuid = ((GuidAttribute)Assembly.GetCustomAttributes(typeof(GuidAttribute), true)[0]).Value;
             MutexMessage = NativeMethods.RegisterMessage(assemblyGuid);
+
+            String mutexName = String.Format(CultureInfo.InvariantCulture, @"Local\{{{0}}}", assemblyGuid);
             s_Mutex = new Mutex(true, mutexName, out Boolean mutexCreated);
 
             if (!mutexCreated)
@@ -55,14 +58,12 @@ namespace MacroUO
             
             s_Lock = new Object();
 
-            Stream stream = assembly.GetManifestResourceStream("MacroUO.Properties.Application.ico");
-
-            if (stream != null)
-                Icon = new Icon(stream);
+            Stream stream = Assembly.GetManifestResourceStream("ParadoxEditor.Properties.Application.ico");
+            Icon = (stream == null) ? null : (new Icon(stream));
 
             MacrosFile = Path.Combine(Application.StartupPath, "Presets.xml");
 
-            Version programVersion = assembly.GetName().Version;
+            Version programVersion = Assembly.GetName().Version;
             Version = String.Concat("v", programVersion.Major, ".", programVersion.Minor);
 
             Application.EnableVisualStyles();

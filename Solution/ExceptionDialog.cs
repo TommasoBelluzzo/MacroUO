@@ -236,13 +236,11 @@ namespace MacroUO
             sb.AppendLine(String.Concat("Machine: ", Environment.MachineName));
             sb.AppendLine(String.Concat("OS: ", Environment.OSVersion, " ", (Environment.Is64BitOperatingSystem ? "64-Bit" : "32-Bit")));
 
-            Assembly assembly = Assembly.GetExecutingAssembly();
-
             sb.AppendLine();
             sb.AppendLine("[INFORMATION - APPLICATION]");
             sb.AppendLine(String.Concat("64-Bit: ", (Environment.Is64BitProcess ? "Yes" : "No")));
-            sb.AppendLine(String.Concat("Location: ", assembly.Location));
-            sb.AppendLine(String.Concat("Name: ", assembly.FullName));
+            sb.AppendLine(String.Concat("Location: ", Program.Assembly.Location));
+            sb.AppendLine(String.Concat("Name: ", Program.Assembly.FullName));
             sb.AppendLine(String.Concat("Working Set: ", Environment.WorkingSet));
 
             return sb.ToString().TrimEnd();
