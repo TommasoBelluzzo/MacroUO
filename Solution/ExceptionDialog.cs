@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
-using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using MacroUO.Properties;
