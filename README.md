@@ -44,7 +44,7 @@ On the bottom of the window there are three buttons. The `Start` button activate
 
 Methods and classes are completely undocumented and the code contains no descriptive comments; I know it's a bad practice, but I really don't have time to create a proper documentation for this project. Nevertheless, everything should be pretty straightforward since it's just a simple form with a few buttons.
 
-The following method (which can be found within the `ApplicationDialog` class):
+The following method (which can be found within the `ApplicationDialog` class) identifies active Ultima Online clients on which macros can be executed:
 
 ```csharp
 private Boolean EnumerateWindow(IntPtr windowHandle, IntPtr lParameter)
@@ -66,4 +66,3 @@ private Boolean EnumerateWindow(IntPtr windowHandle, IntPtr lParameter)
 	return true;
 }
 ```
-helps MacroUO to identify active Ultima Online clients on which macros can be executed.
