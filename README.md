@@ -66,4 +66,4 @@ private Boolean EnumerateWindow(IntPtr windowHandle, IntPtr lParameter)
 	return true;
 }
 ```
-helps MacroUO to identify active Ultima Online clients on which macros can be executed. Making modifications to `windowClass` and `windowText` conditions would allow MacroUO to work on other games or applications. Removing the aforementioned conditions would transform it into a universal input automation tool.
+helps MacroUO to identify active Ultima Online clients on which macros can be executed.
