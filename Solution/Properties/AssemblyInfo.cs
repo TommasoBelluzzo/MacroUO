@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 #endregion
 
 #region Information
-[assembly: AssemblyDescription("A simple macro utility for Ultima Online.")]
 [assembly: AssemblyCompany("Tommaso Belluzzo")]
 
 #if (DEBUG)
@@ -18,7 +17,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright ©2010 Tommaso Belluzzo")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyProduct("MacroUO")]
-[assembly: AssemblyTitle("MacroUO")]
+[assembly: AssemblyTitle("A simple macro utility for Ultima Online.")]
 [assembly: AssemblyTrademark("")]
 #endregion
 
