@@ -71,6 +71,7 @@ namespace MacroUO
             Application.Run(Form = new ApplicationDialog());
 
             s_Mutex.ReleaseMutex();
+            s_Mutex.Close();
         }
         #endregion
 
